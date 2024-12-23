@@ -1,0 +1,100 @@
+local nL = {}
+local ts = game:GetService("TweenService")
+local pg = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local sg = Instance.new("ScreenGui")
+sg.Name = "nL"
+sg.Parent = pg
+
+local nf = Instance.new("Frame")
+nf.Size = UDim2.new(0.3, 0, 0.15, 0)
+nf.Position = UDim2.new(0.35, 0, 0.1, 0)
+nf.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+nf.BackgroundTransparency = 0.2
+nf.Visible = false
+nf.Parent = sg
+
+local nc = Instance.new("UICorner")
+nc.CornerRadius = UDim.new(0.1, 0)
+nc.Parent = nf
+
+local ng = Instance.new("UIGradient")
+ng.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 255, 255))
+}
+ng.Rotation = 45
+ng.Parent = nf
+
+local t = Instance.new("TextLabel")
+t.Font = Enum.Font.GothamBold
+t.TextSize = 20
+t.TextColor3 = Color3.fromRGB(255, 255, 255)
+t.BackgroundTransparency = 1
+t.Size = UDim2.new(1, -20, 0.4, 0)
+t.Position = UDim2.new(0, 10, 0, 5)
+t.Text = "Title"
+t.TextXAlignment = Enum.TextXAlignment.Left
+t.Parent = nf
+
+local d = Instance.new("TextLabel")
+d.Font = Enum.Font.Gotham
+d.TextSize = 16
+d.TextColor3 = Color3.fromRGB(200, 200, 200)
+d.BackgroundTransparency = 1
+d.Size = UDim2.new(1, -20, 0.4, 0)
+d.Position = UDim2.new(0, 10, 0.4, 0)
+d.Text = "Description"
+d.TextWrapped = true
+d.TextXAlignment = Enum.TextXAlignment.Left
+d.Parent = nf
+
+local pb = Instance.new("Frame")
+pb.Size = UDim2.new(1, 0, 0.1, 0)
+pb.Position = UDim2.new(0, 0, 0.9, 0)
+pb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+pb.Parent = nf
+
+local pc = Instance.new("UICorner")
+pc.CornerRadius = UDim.new(0.5, 0)
+pc.Parent = pb
+
+function nL.N(dur, tp, tt, desc)
+    local clrs = {
+        err = Color3.fromRGB(255, 0, 0),
+        warn = Color3.fromRGB(255, 165, 0),
+        right = Color3.fromRGB(0, 255, 0)
+    }
+
+    local gClrs = {
+        err = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 20, 20))
+        },
+        warn = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 210, 50)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 120, 50))
+        },
+        right = ColorSequence.new{
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 255, 80)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 200, 20))
+        }
+    }
+
+    nf.BackgroundColor3 = clrs[tp]
+    ng.Color = gClrs[tp]
+    t.Text = tt or "Notification"
+    d.Text = desc or "Description"
+
+    nf.Visible = true
+    pb.Size = UDim2.new(1, 0, 0.1, 0)
+    local tw = TweenInfo.new(dur, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
+    local twn = ts:Create(pb, tw, {Size = UDim2.new(0, 0, 0.1, 0)})
+    twn:Play()
+
+    twn.Completed:Connect(function()
+        nf.Visible = false
+    end)
+end
+
+return nL
